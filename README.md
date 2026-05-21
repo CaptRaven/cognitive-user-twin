@@ -1,51 +1,108 @@
 # Cognitive User Twin Platform
 
-## Production-Grade AI Behavioral Simulation
+## Production-Ready AI Behavioral Simulation & Recommendation
 
-### Setup & Startup
+A persistent behavioral cognition simulation platform that models a "living" digital human with evolving preferences, memories, emotions, and decision-making patterns. This system satisfies both the **Cognitive User Twin** and **Intelligent Recommendation Engine** competition tasks.
 
-1. **Local Installation**
-   ```bash
-   # Create a virtual environment
-   python3 -m venv venv
-   source venv/bin/activate  # On macOS/Linux
-   
-   # Install dependencies
-   pip install -r requirements.txt
-   
-   # Run the API
-   python apps/api/main.py
-   ```
+***
 
-2. **Running Tests**
-   ```bash
-   # Run all tests including API endpoints
-   ./venv/bin/python3 test_run.py
-   
-   # Or using pytest directly
-   ./venv/bin/python3 -m pytest tests/test_api.py
-   ```
+## Quick Start
 
-2. **Docker Setup**
-   ```bash
-   docker build -t cognitive-user-twin .
-   docker run -p 8000:8000 cognitive-user-twin
-   ```
+### 1. Backend Setup (FastAPI)
 
-### API Endpoints
+```bash
+# From project root
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 
-- **GET /health**: Check system status.
-- **POST /simulate-review**: Generate a behavioral review based on user/item/context.
-- **POST /recommend**: Get cognitive-ranked recommendations.
-- **POST /user/update**: Update user trust and memory after an interaction.
+# Run the API in module mode
+python3 -m apps.api.main
+```
 
-### Architecture
-- **core/**: The behavioral "brain" (engine, models, recommender, review_gen).
-- **apps/api/**: FastAPI layer with service/router separation.
-- **tests/**: Behavioral and core unit tests.
+The API will be available at `http://localhost:8000`. You can view the OpenAPI docs at `http://localhost:8000/docs`.
 
-### Features
-- Nigerian Contextual Realism (Lagos stress, Rural affordability).
-- Episodic & Semantic Memory with Decay.
-- Negativity Bias in Trust Drift.
-- Transparent Behavioral Reasoning Traces.
+### 2. Frontend Setup (Next.js)
+
+```bash
+# From apps/web directory
+cd apps/web
+npm install
+npm run dev
+```
+
+The **Living Cognitive Twin Monitor** will be available at `http://localhost:3000`.
+
+***
+
+## Core Architecture
+
+### Phase 1 — Vector Store Population
+
+The system uses **ChromaDB** populated with 140+ realistic business candidates (Nigerian archetypes, fusion restaurants, quiet cafes).
+
+- **Script**: `python3 scripts/populate_vector_store.py`
+- **Metadata**: Includes price, ambiance, delivery speed, and **stress-comfort score**.
+
+### Phase 2 — Autonomous Life Simulation
+
+The "Twin" lives in a dynamic environment ([environment.py](core/simulation/environment.py)) where events like traffic frustration, budget pressure, and hunger trigger cognitive decisions.
+
+- **State Evolution**: Implements negativity bias, loyalty formation, and decision fatigue.
+- **Memory**: Persistent episodic and semantic memory with temporal decay.
+
+### Phase 3 — FastAPI Production API
+
+- `POST /simulate/start`: Initialize a new twin.
+- `POST /simulate/step`: Advance simulation by 1 hour.
+- `GET /timeline`: Live behavioral feed with neural traces.
+- `GET /analytics`: Loyalty trends and trust drift metrics.
+
+### Phase 4 — Demo Visualization UI
+
+A modern "Living Monitor" built with **Next.js**, **TailwindCSS**, and **Framer Motion**.
+
+- **Live State**: Real-time mood, fatigue, and loyalty tracking.
+- **Behavioral Timeline**: A scrolling feed of the twin's daily life.
+- **Cognition Panel**: Visible reasoning chains and influence vectors for every decision.
+
+***
+
+## 🐳 Docker Deployment
+
+To run the backend using Docker:
+
+```bash
+# Build the image
+docker build -t twin-backend .
+
+# Run with environment variables
+docker run -d \
+  --name twin-backend \
+  -p 8000:8000 \
+  --env-file .env \
+  -v $(pwd)/data:/app/data \
+  twin-backend
+```
+
+***
+
+## 📊 Evaluation & Analytics
+
+The platform tracks:
+
+- **Behavioral Consistency**: How fatigue affects convenience preference.
+- **Trust Drift**: Loyalty evolution based on service quality.
+- **Exploration Adaptation**: Novelty seeking vs. settlement behavior.
+- **Cognitive Auditing**: Explainable AI traces for every recommendation.
+
+***
+
+## 🛠 Tech Stack
+
+- **Backend**: FastAPI, Pydantic, NumPy
+- **AI/LLM**: Mistral AI (Review Generation), SentenceTransformers (Embeddings)
+- **Database**: ChromaDB (Vector Store)
+- **Frontend**: Next.js 15, TailwindCSS, Framer Motion, Lucide React
+- **Infrastructure**: Docker, Python 3.12
+

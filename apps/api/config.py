@@ -16,6 +16,10 @@ class Settings(BaseSettings):
     MISTRAL_API_KEY: str = ""
     MISTRAL_MODEL: str = "mistral-tiny"
     
+    # Extra fields from error
+    environment: str = "production"
+    chroma_dir: str = "data/chroma"
+    
     model_config = SettingsConfigDict(env_file=".env")
 
 settings = Settings()
