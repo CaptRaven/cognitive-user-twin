@@ -8,7 +8,7 @@ import CognitionPanel from "@/components/CognitionPanel";
 import { Play, SkipForward, RefreshCw, Brain, Activity, Database } from "lucide-react";
 import { motion } from "framer-motion";
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = "https://cognitive-user-twin-api-production.up.railway.app";
 
 export default function Home() {
   const [state, setState] = useState<any>(null);
