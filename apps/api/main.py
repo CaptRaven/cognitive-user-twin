@@ -169,11 +169,11 @@ async def populate_vector_store():
     count = chroma_store.business_coll.count()
     logger.info(f"Successfully populated vector store. Total businesses in collection: {count}")
 
-# @app.on_event("startup")
-# async def startup_event():
-#     import asyncio
-#     # Run population in background to avoid blocking server startup
-#     asyncio.create_task(populate_vector_store())
+@app.post("/populate-chroma")
+async def trigger_populate_chroma():
+    """Manually trigger ChromaDB population."""
+    await populate_vector_store()
+    return {"status": "success", "message": "ChromaDB population started"}
 
 # Include Routers
 app.include_router(simulate.router, prefix="/simulate", tags=["Simulation"])
