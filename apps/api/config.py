@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     # Extra fields from error
     environment: str = "production"
     chroma_dir: str = "data/chroma"
+    hf_cache_dir: str = "data/hf_cache"
     
     model_config = SettingsConfigDict(env_file=".env")
 
