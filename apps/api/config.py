@@ -1,11 +1,12 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional
+import os
 
 class Settings(BaseSettings):
     APP_NAME: str = "Cognitive User Twin API"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = False
-    PORT: int = 8000
+    PORT: int = int(os.getenv("PORT", 8000))
     HOST: str = "0.0.0.0"
     
     # Engine Settings
