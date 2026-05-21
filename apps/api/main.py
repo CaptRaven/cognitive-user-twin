@@ -4,6 +4,11 @@ from apps.api.routers import simulate, recommend, review, timeline, analytics
 from apps.api.config import settings
 import logging
 import random
+import os
+
+# Set HuggingFace cache directory to use our persistent Railway volume
+os.makedirs(settings.hf_cache_dir, exist_ok=True)
+os.environ["HF_HOME"] = settings.hf_cache_dir
 from typing import List, Dict, Any
 from core.retrieval.embedding_service import EmbeddingService
 from core.retrieval.chroma_store import ChromaStore
