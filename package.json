@@ -1,0 +1,11 @@
+{
+  "name": "cognitive-user-twin",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:api": "cd apps/api && python -m apps.api.main",
+    "dev:web": "cd apps/web && npm run dev",
+    "build:web": "cd apps/web && npm run build",
+    "start:web": "cd apps/web && npm run start"
+  }
+}
