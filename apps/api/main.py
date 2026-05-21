@@ -101,29 +101,31 @@ def generate_synthetic_businesses() -> List[Dict[str, Any]]:
     return businesses
 
 async def populate_vector_store():
-    """Populates ChromaDB with synthetic businesses on server startup."""
-    logger.info("Starting Vector Store Population...")
+    """Populates ChromaDB with synthetic businesses only if not already populated."""
+    logger.info("Checking ChromaDB state...")
     
     # 1. Initialize services
-    embedding_service = EmbeddingService()
     chroma_store = ChromaStore(persist_directory=settings.chroma_dir)
     
-    # Clear existing collection for a fresh demo state
-    logger.info("Clearing existing 'businesses' collection...")
+    # Check if businesses collection already exists and has data
     try:
-        chroma_store.client.delete_collection("businesses")
-        chroma_store.business_coll = chroma_store.client.create_collection(
-            name="businesses",
-            metadata={"hnsw:space": "cosine"}
-        )
+        count = chroma_store.business_coll.count()
+        if count > 0:
+            logger.info(f"ChromaDB already has {count} businesses - skipping population.")
+            return
     except Exception as e:
-        logger.warning(f"Could not clear collection: {e}")
+        logger.warning(f"Could not check collection count: {e}")
     
-    # 2. Get synthetic data
+    logger.info("Starting Vector Store Population...")
+    
+    # 2. Initialize embedding service
+    embedding_service = EmbeddingService()
+    
+    # 3. Get synthetic data
     businesses = generate_synthetic_businesses()
     logger.info(f"Generated {len(businesses)} synthetic businesses.")
     
-    # 3. Process and embed
+    # 4. Process and embed
     ids = []
     embeddings = []
     metadatas = []
@@ -156,7 +158,7 @@ async def populate_vector_store():
             "stress_comfort_score": biz['stress_comfort_score']
         })
         
-    # 4. Add to Chroma
+    # 5. Add to Chroma
     logger.info(f"Adding {len(ids)} businesses to ChromaDB...")
     batch_size = 50
     for i in range(0, len(ids), batch_size):
@@ -169,7 +171,9 @@ async def populate_vector_store():
 
 @app.on_event("startup")
 async def startup_event():
-    await populate_vector_store()
+    import asyncio
+    # Run population in background to avoid blocking server startup
+    asyncio.create_task(populate_vector_store())
 
 # Include Routers
 app.include_router(simulate.router, prefix="/simulate", tags=["Simulation"])
